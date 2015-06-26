@@ -69,5 +69,14 @@
          value   = "ajax.jsonをリクエスト"
          onclick = "requestFile( '' , 'GET', 'http://localhost:8000/ajax.json' , true )"><br>
   sensor1:<input type="text" id="sensor1" size="10" value="0"><br>
-  sensor2:<input type="text" id="sensor2" size="10" value="0">
-</form>
+  sensor2:<input type="text" id="sensor2" size="10" value="0"><br>
+  </form>
+<br>
+  <form method="post" action="/post" target="postframe">
+  pan:<input type="text" name="pan" size="10" value="0"><br>
+  tilt:<input type="text" name="tilt" size="10" value="0"><br>
+  talk:<textarea name="talk" cols=40 rows=4></textarea>
+  <input type="submit" size="4" value="送信">
+  </form>
+<iframe name="postframe">
+</iframe>
