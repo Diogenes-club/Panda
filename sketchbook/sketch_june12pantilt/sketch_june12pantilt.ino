@@ -87,7 +87,7 @@ void loop() {
     valZ = analogRead(gyroPinZ);
 
     char charStr[32];
-    sprintf(charStr, "%d,%d,%d", valX, valY, valZ);
+    sprintf(charStr, "gyro:%d,%d,%d", valX, valY, valZ);
     Serial.println(charStr);
 
     /* タッチセンサーの値 */
