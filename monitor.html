@@ -1,3 +1,4 @@
+
 <script language="JavaScript">
 <!--
 
@@ -8,20 +9,20 @@
     if(window.ActiveXObject){
         try {
             //MSXML2以降用
-            return new ActiveXObject("Msxml2.XMLHTTP") //[1]'
+            return new ActiveXObject("Msxml2.XMLHTTP");
         } catch (e) {
             try {
                 //旧MSXML用
-                return new ActiveXObject("Microsoft.XMLHTTP") //[1]'
+                return new ActiveXObject("Microsoft.XMLHTTP")
             } catch (e2) {
-                return null
+                return null;
             }
          }
     } else if(window.XMLHttpRequest){
         //Win ie以外のXMLHttpRequestオブジェクト実装ブラウザ用
-        return new XMLHttpRequest() //[1]'
+        return new XMLHttpRequest();
     } else {
-        return null
+        return null;
     }
   }
 
@@ -29,31 +30,31 @@
   function requestFile( data , method , fileName , async )
   {
     //XMLHttpRequestオブジェクト生成
-    var httpoj = createHttpRequest() //[1]
+    var httpoj = createHttpRequest();
     
     //open メソッド
-    httpoj.open( method , fileName , async ) //[2]
+    httpoj.open( method , fileName , async );
     
     //受信時に起動するイベント
-    httpoj.onreadystatechange = function()  //[4]
+    httpoj.onreadystatechange = function()
     { 
       //readyState値は4で受信完了
-      if (httpoj.readyState==4)  //[5]
+      if (httpoj.readyState==4)
       { 
         //コールバック
-        on_loaded(httpoj)
+        on_loaded(httpoj);
       }
     }
     
     //send メソッド
-    httpoj.send( data ) //[3]
+    httpoj.send( data );
   }
 
   //コールバック関数 ( 受信時に実行されます )
   function on_loaded(oj)
   {
         //レスポンスを取得
-        res  = oj.responseText //[6]
+        res  = oj.responseText;
         
         //テキストボックスに表示
         jsonobj = eval( "(" + res + ")" );
@@ -67,7 +68,7 @@
 <form>
   <input type    = "button"
          value   = "ajax.jsonをリクエスト"
-         onclick = "requestFile( '' , 'GET', 'http://localhost:8000/ajax.json' , true )"><br>
+         onclick = "requestFile( '' , 'GET', '/ajax.json' , true )"><br>
   sensor1:<input type="text" id="sensor1" size="10" value="0"><br>
   sensor2:<input type="text" id="sensor2" size="10" value="0"><br>
   </form>
