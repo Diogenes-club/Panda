@@ -1,6 +1,12 @@
-
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<title>パンダモニター画面</title>
+</head>
+<body onLoad='setTimeout("ajaxaccess()", 1000);'>
 <script language="JavaScript">
 <!--
+  var reloadspan = 2000;
 
   //XMLHttpRequestオブジェクト生成
   function createHttpRequest(){
@@ -61,23 +67,70 @@
 
         document.getElementById("sensor1").value = jsonobj.sensor1;
         document.getElementById("sensor2").value = jsonobj.sensor2;
+        document.getElementById("gyro1").value = jsonobj.gyro[0];
+        document.getElementById("gyro2").value = jsonobj.gyro[1];
+        document.getElementById("gyro3").value = jsonobj.gyro[2];
+
   }
-  
+ 
+  function ajaxaccess() {
+  	requestFile( '' , 'GET', '/ajax.json' , true );
+  	setTimeout("ajaxaccess()", reloadspan);
+  }
 //-->
 </script>
-<form>
-  <input type    = "button"
-         value   = "ajax.jsonをリクエスト"
-         onclick = "requestFile( '' , 'GET', '/ajax.json' , true )"><br>
+<div style="float:left;">
+<h1>センサー値</h1>
+<div>
   sensor1:<input type="text" id="sensor1" size="10" value="0"><br>
   sensor2:<input type="text" id="sensor2" size="10" value="0"><br>
-  </form>
-<br>
+  gyro1:<input type="text" id="gyro1" size="10" value="0"><br>
+  gyro2:<input type="text" id="gyro2" size="10" value="0"><br>
+  gyro3:<input type="text" id="gyro3" size="10" value="0"><br>
+  commet:<input type="text" id="gyro3" size="50" value="0"><br>
+</div>
+<h1>送信命令</h1>
+<div>
   <form method="post" action="/post" target="postframe">
   pan:<input type="text" name="pan" size="10" value="0"><br>
   tilt:<input type="text" name="tilt" size="10" value="0"><br>
-  talk:<textarea name="talk" cols=40 rows=4></textarea>
+  talk:<textarea name="talk" cols=40 rows=3></textarea><br>
   <input type="submit" size="4" value="送信">
+  <input type="reset" size="4" value="リセット">
   </form>
+  <form method="post" action="/post" target="postframe">
+    回数<input type="text" name="nod" size="10" value="0">
+    <input type="submit" size="4" value="nod">
+  </form>
+  <form method="post" action="/post" target="postframe">
+    回数<input type="text" name="shake" size="10" value="0">
+    <input type="submit" size="4" value="shake">
+  </form>
+  <form method="post" action="/post" target="postframe">
+    <input type="hidden" name="detach" size="10" value="0">
+    <input type="submit" size="4" value="detach">
+  </form>
+
+</div>
+<h2>送信応答</h2>
+<div>
 <iframe name="postframe">
 </iframe>
+</div>
+</div>
+
+<div style="float:left;">
+<h1>可視化図</h1>
+<div>
+制作中
+
+
+
+</div>
+<h1>通信ログ</h1>
+<div>
+<textarea name="log" cols=50 rows=10></textarea>
+</div>
+</div>
+</body>
+</html>
