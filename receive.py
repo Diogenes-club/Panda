@@ -5,6 +5,7 @@ import cgi
 import serial
 import time
 import re
+import socket
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 	def do_GET(self):
@@ -77,6 +78,14 @@ def worker():
 		line = ser.readline()
 		line = line[:-2] #改行を削る
 		q.put(line) #キューに追加
+
+def worker2():
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.connect(('127.0.0.1', 10500))
+	while True:
+		line = sf.readline().decode('utf-8')
+		if line.find(u'おはよう') != -1:
+			os.system('./aquestalkpi/AquesTalkPi "おはようございます" | aplay&')
 
 if __name__ == '__main__':
 	ser = serial.Serial('/dev/ttyACM0', timeout=5.0)
