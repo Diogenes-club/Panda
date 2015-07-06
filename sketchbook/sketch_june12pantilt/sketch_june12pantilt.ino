@@ -1,6 +1,6 @@
 #include <Servo.h>
 #include <string.h>
-#include <pthread.h>
+#include <stdio.h>
 
 int servoPin1 = 8;
 int servoPin2 = 9;
@@ -15,23 +15,20 @@ int valX,valY,valZ;
 int touchPinA1 = 13;
 int touchPinA2 = 12;
 
+unsigned long time0, time1;
 void setup() {
-    pthread_t thread;
-    pthread_create(&thread, NULL, loop_thread, NULL);
-
     pinMode(gyroPinX, INPUT);
     pinMode(gyroPinY, INPUT);
     pinMode(gyroPinZ, INPUT);
 
-    pinMode(touchPin1, OUTPUT);
-    pinMode(touchPin2, INPUT);
+    pinMode(touchPinA1, OUTPUT);
+    pinMode(touchPinA2, INPUT);
 
-    Serial.begin(9600);    // 9600bpsでポートを開く
+    Serial.begin(9600);
+    time0 = millis();
 }
 
-void *loop_thread(void *param) {
-    while(1) {
-        /* シリアル通信から1行とりだす */
+void uplink_func() {
         String strSer = "";
         while (Serial.available() > 0) {
             char c = Serial.read();
@@ -39,18 +36,16 @@ void *loop_thread(void *param) {
             strSer += c;
         }
 
-        /* シリアル命令を解析 */
-
         char opName[20];
         int opValue;
-        sscanf(strSer.data(), "%s:%d", opName, &opValue);
-        if (strcmp(opName, "pan") == 0) {  //  パン
+        sscanf(strSer.c_str(), "%s:%d", opName, &opValue);
+        if (strcmp(opName, "pan") == 0 && opValue >= 0 && opValue <= 180) {
             myservo1.attach(servoPin1);
             myservo1.write(opValue);
-        } else if (strcmp(opName, "tilt") == 0) {  //  チルト
+        } else if (strcmp(opName, "tilt") == 0 && opValue >= 0 && opValue <= 180) {
             myservo2.attach(servoPin2);
             myservo2.write(opValue);
-        } else if (strcmp(opName, "nod") == 0) {  //  うなずく
+        } else if (strcmp(opName, "nod") == 0 && opValue < 5) {
             for (int i = 0; i < opValue; i++) {
                 myservo1.attach(servoPin1);
                 myservo2.attach(servoPin2);
@@ -61,7 +56,7 @@ void *loop_thread(void *param) {
                 delay(500);
             }
             myservo2.write(90);
-        } else if (strcmp(opName, "shake") == 0) {  //  いやいや
+        } else if (strcmp(opName, "shake") == 0 && opValue < 5) {
             for (int i = 0; i < opValue; i++) {
                 myservo1.attach(servoPin1);
                 myservo2.attach(servoPin2);
@@ -72,16 +67,13 @@ void *loop_thread(void *param) {
                 delay(500);
             }
             myservo2.write(90);
-        } else if (strcmp(opName, "detach") == 0) {  //  完全停止
+        } else if (strcmp(opName, "detach") == 0) {
             myservo1.detach();
             myservo2.detach();
         }
-        return NULL;
-    }
 }
 
-void loop() {
-    /* ジャイロセンサーの値 */
+void downlink_func() {
     valX = analogRead(gyroPinX);
     valY = analogRead(gyroPinY);
     valZ = analogRead(gyroPinZ);
@@ -90,11 +82,22 @@ void loop() {
     sprintf(charStr, "gyro:%d,%d,%d", valX, valY, valZ);
     Serial.println(charStr);
 
-    /* タッチセンサーの値 */
     int rechargeTime = 0;
     digitalWrite(touchPinA1, HIGH);
     while (digitalRead(touchPinA2) != HIGH) {
         rechargeTime++;
     }
-    Serial.println("sensor1:" + to_string(rechargeTime));
+    
+    char charStr2[32];
+    sprintf(charStr2, "sensor1:%d", rechargeTime);
+    Serial.println(charStr2);
+}
+
+void loop() {
+  downlink_func();
+  time1 = millis();
+  if (time1 - time0 > 1000) {
+    uplink_func();
+    time0 = time1;
+  }
 }
