@@ -70,6 +70,7 @@
         document.getElementById("gyro1").value = jsonobj.gyro[0];
         document.getElementById("gyro2").value = jsonobj.gyro[1];
         document.getElementById("gyro3").value = jsonobj.gyro[2];
+        if (jsonobj.comment) document.getElementById("comment").value = jsonobj.comment;
 
   }
  
@@ -87,7 +88,7 @@
   gyro1:<input type="text" id="gyro1" size="10" value="0"><br>
   gyro2:<input type="text" id="gyro2" size="10" value="0"><br>
   gyro3:<input type="text" id="gyro3" size="10" value="0"><br>
-  commet:<input type="text" id="gyro3" size="50" value="0"><br>
+  comment:<input type="text" id="comment" size="50" value="0"><br>
 </div>
 <h1>送信命令</h1>
 <div>
