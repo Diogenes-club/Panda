@@ -16,6 +16,7 @@ int touchPinA1 = 13;
 int touchPinA2 = 12;
 
 unsigned long time0, time1;
+
 void setup() {
     pinMode(gyroPinX, INPUT);
     pinMode(gyroPinY, INPUT);
@@ -28,7 +29,7 @@ void setup() {
     time0 = millis();
 }
 
-void uplink_func() {
+void uplink() {
         String strSer = "";
         while (Serial.available() > 0) {
             char c = Serial.read();
@@ -73,7 +74,7 @@ void uplink_func() {
         }
 }
 
-void downlink_func() {
+void downlink() {
     valX = analogRead(gyroPinX);
     valY = analogRead(gyroPinY);
     valZ = analogRead(gyroPinZ);
@@ -94,10 +95,11 @@ void downlink_func() {
 }
 
 void loop() {
-  downlink_func();
+  uplink();
   time1 = millis();
   if (time1 - time0 > 1000) {
-    uplink_func();
     time0 = time1;
+    downlink();
+
   }
 }
