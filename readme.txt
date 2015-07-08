@@ -1,14 +1,14 @@
-Execute receive.py and access http://127.0.0.1:8000/
+Execute Julius(module mode) and receive.py and access http://127.0.0.1:8000/
 
 Panda System
 
    pin write                               aquestalk
-     ↑                 →downlink            ↑                →GET 127.0.0.1:8000/ajax.json
-arduino(pantilt.ino) =====serial===== raspberry pi(receive.py) ==============http============ browser(/)
-     ↑                 ←uplink              ||                 ←POST 127.0.0.1:8000/post
-   pin read                                  http ↑
-                                              ||  GET 127.0.0.1:10500/
-                                            julius
+     ↑                 →downlink            ↑                   →GET
+arduino(pantilt.ino) =====serial===== raspberry pi(receive.py) =====http===== web browser
+     ↑                 ←uplink              ||                   ←POST         ||
+   pin read                                  http ↑GET                    Voice streaming server
+                                              ||
+                                      Julius module mode
 example:
 
 downlink
@@ -35,3 +35,9 @@ GET 127.0.0.1:8000/ajax.json
 POST 127.0.0.1:8000/post
 -----------------------
 pan=90&tilt=120&talk=Hello,+I+am+Panda.
+
+
+Necessary module:
+・pySerial
+・Chainer
+・numpy
