@@ -114,12 +114,12 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 def serialread():
 	# 最初の1行は途切れている可能性があるので捨てる
 	while True:
-	#	str = ser.read(1) #
+		str = ser.read(1) #
 		if str == "\n":
 			break
 
 	while True:
-	#	line = ser.readline() #
+		line = ser.readline() #
 		line = line[:-2] #改行を削る
 		q.put(line)
 
@@ -145,7 +145,7 @@ def aquestalk(line):
 	os.system('./aquestalkpi/AquesTalkPi "' + line + '" | aplay&')
 
 if __name__ == '__main__':
-	#ser = serial.Serial('/dev/ttyACM0', timeout=5.0) #
+	ser = serial.Serial('/dev/ttyACM0', timeout=5.0) #
 	q = Queue.Queue()
 	t1 = threading.Thread(target=serialread)
 	t1.daemon = True
