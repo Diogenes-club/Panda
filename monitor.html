@@ -35,16 +35,13 @@
   //ファイルにアクセスし受信内容を確認します
   function requestFile( data , method , fileName , async )
   {
-    //XMLHttpRequestオブジェクト生成
     var httpoj = createHttpRequest();
     
-    //open メソッド
     httpoj.open( method , fileName , async );
     
     //受信時に起動するイベント
     httpoj.onreadystatechange = function()
     { 
-      //readyState値は4で受信完了
       if (httpoj.readyState==4)
       { 
         //コールバック
@@ -52,17 +49,14 @@
       }
     }
     
-    //send メソッド
     httpoj.send( data );
   }
 
   //コールバック関数 ( 受信時に実行されます )
   function on_loaded(oj)
   {
-        //レスポンスを取得
         res  = oj.responseText;
         
-        //テキストボックスに表示
         jsonobj = eval( "(" + res + ")" );
 
         document.getElementById("sensor1").value = jsonobj.sensor1;
@@ -73,13 +67,59 @@
         if (jsonobj.comment) document.getElementById("comment").value = jsonobj.comment;
 
   }
- 
+
   function ajaxaccess() {
   	requestFile( '' , 'GET', '/ajax.json' , true );
   	setTimeout("ajaxaccess()", reloadspan);
   }
 //-->
 </script>
+<div style="float:left;">
+<h1>制御モード切り替え</h1>
+<div style="float:left;">
+  <form method="post" action="/post" target="postframe">
+    <input type="hidden" name="aimode" size="10" value="1">
+    <input type="submit" size="4" value="AI mode" onClick='document.getElementById("modespan").innerHTML = "人工知能モード";'>
+  </form>
+  <form method="post" action="/post" target="postframe">
+    <input type="hidden" name="aimode" size="10" value="0">
+    <input type="submit" size="4" value="Wirepuller mode" onClick='document.getElementById("modespan").innerHTML = "黒子モード"'>
+  </form>
+</div>
+<div>
+　<span id="modespan" style="color:#ff0000;font-size:xx-large; border-width:medium; border-style:solid; border-color:#ff0000">黒子モード</span>
+</div>
+<h1>送信命令</h1>
+<div>
+  <form method="post" action="/post" target="postframe">
+  pan:<input type="text" name="pan" size="10" value="0">
+  tilt:<input type="text" name="tilt" size="10" value="0">
+  <input type="submit" size="4" value="送信">
+  </form>
+  <form method="post" action="/post" target="postframe">
+    count:<input type="text" name="nod" size="10" value="0">
+    <input type="submit" size="4" value="nod">
+  </form>
+  <form method="post" action="/post" target="postframe">
+    count:<input type="text" name="shake" size="10" value="0">
+    <input type="submit" size="4" value="shake">
+  </form>
+  <form method="post" action="/post" target="postframe">
+    <input type="hidden" name="detach" size="10" value="0">
+    <input type="submit" size="4" value="detach">
+  </form>
+  <form method="post" action="/post" target="postframe">
+  talk:<textarea name="talk" cols=50 rows=3></textarea><br>
+  <input type="submit" size="4" value="送信">
+  <input type="reset" size="4" value="リセット">
+  </form>
+</div>
+<h1>送信応答</h1>
+<div>
+<iframe name="postframe">
+</iframe>
+</div>
+</div>
 <div style="float:left;">
 <h1>センサー値</h1>
 <div>
@@ -88,49 +128,23 @@
   gyro1:<input type="text" id="gyro1" size="10" value="0"><br>
   gyro2:<input type="text" id="gyro2" size="10" value="0"><br>
   gyro3:<input type="text" id="gyro3" size="10" value="0"><br>
-  comment:<input type="text" id="comment" size="50" value="0"><br>
-</div>
-<h1>送信命令</h1>
-<div>
-  <form method="post" action="/post" target="postframe">
-  pan:<input type="text" name="pan" size="10" value="0"><br>
-  tilt:<input type="text" name="tilt" size="10" value="0"><br>
-  talk:<textarea name="talk" cols=40 rows=3></textarea><br>
-  <input type="submit" size="4" value="送信">
-  <input type="reset" size="4" value="リセット">
-  </form>
-  <form method="post" action="/post" target="postframe">
-    回数<input type="text" name="nod" size="10" value="0">
-    <input type="submit" size="4" value="nod">
-  </form>
-  <form method="post" action="/post" target="postframe">
-    回数<input type="text" name="shake" size="10" value="0">
-    <input type="submit" size="4" value="shake">
-  </form>
-  <form method="post" action="/post" target="postframe">
-    <input type="hidden" name="detach" size="10" value="0">
-    <input type="submit" size="4" value="detach">
-  </form>
-
-</div>
-<h2>送信応答</h2>
-<div>
-<iframe name="postframe">
-</iframe>
-</div>
+  comment:<input type="text" id="comment" size="60" value=""><br>
 </div>
 
-<div style="float:left;">
 <h1>可視化図</h1>
 <div>
 制作中
-
-
-
+<br>　　 ∩＿＿＿∩
+<br>　　 | ノ　　　　　 ヽ
+<br>　　/　　●　　　● |　クマ──！！
+<br>　 |　　　　( _●_)　 ミ
+<br>　彡､　　　|∪|　　､｀＼
+<br>/　＿＿　 ヽノ　/´>　 )
+<br>＿＿＿）　　　/　(_／
 </div>
 <h1>通信ログ</h1>
 <div>
-<textarea name="log" cols=50 rows=10></textarea>
+<textarea name="log" cols=50 rows=5></textarea>
 </div>
 </div>
 </body>
