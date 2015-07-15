@@ -29,7 +29,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 					jsoncode += '"' + m2.group(1) + '": ["' + m2.group(2) + '", "' + m2.group(3) + '", "' + m2.group(4) + '"], '
 			jsoncode += "}"
 
-			jsoncode = '{"sensor1": "1", "sensor2": "0", "gyro": ["33","34","35"]}' #testcode
+			#jsoncode = '{"sensor1": "1", "sensor2": "0", "gyro": ["33","34","35"]}' #testcode
 			self.send_response(200)
 			self.end_headers()
 			self.wfile.write(jsoncode)
@@ -121,6 +121,7 @@ def serialread():
 	while True:
 		line = ser.readline() #
 		line = line[:-2] #改行を削る
+		#print line
 		q.put(line)
 
 def juliusread():
