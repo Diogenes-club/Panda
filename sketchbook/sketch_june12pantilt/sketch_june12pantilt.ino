@@ -30,16 +30,18 @@ void setup() {
 }
 
 void uplink() {
-        String strSer = "";
+        char strSer[32];
+        int n = 0;
         while (Serial.available() > 0) {
             char c = Serial.read();
             if (c == '\n') break;
-            strSer += c;
+            strSer[n] = c;
+            n++;
         }
 
         char opName[20];
         int opValue;
-        sscanf(strSer.c_str(), "%s:%d", opName, &opValue);
+        sscanf(strSer, "%s:%d", opName, &opValue);
         if (strcmp(opName, "pan") == 0 && opValue >= 0 && opValue <= 180) {
             myservo1.attach(servoPin1);
             myservo1.write(opValue);
